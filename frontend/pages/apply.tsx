@@ -14,7 +14,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { useI18n } from "@/lib/i18n";
+import { useI18n, type ApplyTranslationSubkey, type TranslationKey } from "@/lib/i18n";
 import { PROJECT_CATEGORIES } from "@/utils/format";
 import {
   submitVerificationRequest,
@@ -86,7 +86,8 @@ function Field({
 export default function ApplyPage() {
   const router = useRouter();
   const { t } = useI18n();
-  const T = (key: string) => (t(`apply.${key}`) as string) || key;
+  const T = (key: ApplyTranslationSubkey) =>
+    t(`apply.${key}` as Extract<TranslationKey, `apply.${string}`>);
 
   const [step, setStep] = useState<Step>("org");
   const [submitting, setSubmitting] = useState(false);
@@ -261,7 +262,7 @@ export default function ApplyPage() {
 
   if (step === "done") {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center animate-fade-in">
+      <div className="max-w-xl mx-auto px-4 py-20 text-center animate-fade-in motion-reduce:animate-none">
         <div className="text-6xl mb-6">🔍</div>
         <h1 className="font-display text-3xl font-bold text-forest-900 mb-3">{T("subThanks")}</h1>
         <p className="text-[var(--text-secondary)] font-body mb-8">
@@ -275,7 +276,7 @@ export default function ApplyPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10 animate-fade-in">
+    <div className="max-w-2xl mx-auto px-4 py-10 animate-fade-in motion-reduce:animate-none">
       <p className="text-xs uppercase tracking-widest text-forest-600 font-bold mb-2 font-body">
         {T("pageTitle")}
       </p>
@@ -613,12 +614,12 @@ export default function ApplyPage() {
           disabled={stepIndex === 0}
           className="btn-secondary disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {T("common.back") || "Back"}
+          {t("common.back")}
         </button>
 
         {step === "documents" ? (
           <button type="button" onClick={nextStep} className="btn-primary">
-            {T("common.next") || "Next"}
+            {t("common.next")}
           </button>
         ) : step === "review" ? (
           <button
@@ -631,7 +632,7 @@ export default function ApplyPage() {
           </button>
         ) : (
           <button type="button" onClick={nextStep} className="btn-primary">
-            {T("common.next") || "Next"}
+            {t("common.next")}
           </button>
         )}
       </div>
